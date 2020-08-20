@@ -1,55 +1,67 @@
 import sys, pygame, random
 from pygame.locals import *
+from School import SchoolofFish
 
 pygame.init()
 screen_info = pygame.display.Info()
+
 # set the width and height to the size of the screen
 size = (width, height) = (int(screen_info.current_w), int(screen_info.current_h))
 
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
-color = (100, 127, 255)
 
-#load fish image and rect
+color = (0, 127, 255)
+School = (30, 40)
 fish_image = pygame.image.load("fish.png")
-fish_image = pygame.transform.smoothscale(fish_image, (80, 80))
-
+fish_image = pygame.transform.smoothscale(fish_image, (160, 160))
 fish_rect = fish_image.get_rect()
-
-speed = pygame.math.Vector2(0, 3)
-
-if fish_rect.left < 0 or    fish_rect.right > screen_info.current_w:
-  speed[0] *= -1
-  fish_image = pygame.transform.flip(fish_image, True, False)
-  fish_rect.move_ip(speed[0], 0)
-
-if fish_rect.top < 0 or   fish_rect.bottom > screen_info.current_h:
-  speed[1] *= -1
-  fish_image = pygame.transform.flip(fish_image, False, True)
-  fish_rect.move_ip(0, speed[1])
-
-#Setting fish’s position
 fish_rect.center = (width // 2, height // 2)
-
-#set fish speed and rotation
-speed = pygame.math.Vector2(0, 5)
+speed = pygame.math.Vector2(9,10)
 rotation = random.randint(0, 360)
 speed.rotate_ip(rotation)
 fish_image = pygame.transform.rotate(fish_image, 180 - rotation)
+place = random.randint(0, screen_info.current_w) 
+kraggle = SchoolofFish((place, place))
+students = [kraggle]
 
 def move_fish():
-  fish_rect.move_ip(speed)
+    global fish_image
+    # get information from screen in case of resizing
+    screen_info = pygame.display.Info()
+    fish_rect.move_ip(speed)
+    
+    if fish_rect.left < 0 or fish_rect.right > screen_info.current_w:
+        speed[0] *= -1
+        fish_image = pygame.transform.flip(fish_image, True, False)
+        fish_rect.move_ip(speed[0], 0)
+    if fish_rect.top < 0 or fish_rect.bottom > screen_info.current_h:
+        speed[1] *= -1
+        fish_image = pygame.transform.flip(fish_image, False, True)
+        fish_rect.move_ip(0, speed[1])
+
 
 def main():
-  while True:
-    clock.tick(60)
-		#for event in event.pygame.get():
-			#if event.type == QUIT: sys.exit()
-			#sys.exit
-    move_fish()
-    screen.fill(color)
-    screen.blit(fish_image, fish_rect)
-    pygame.display.flip()
+	for i in range(10):
+		students.append(SchoolofFish((place, place)))
+
+
+while True:
+
+				clock.tick(60)
+        
+
+				for School in students:
+					kraggle.update()
+				for School in students:
+					kraggle.draw(screen)
+				#kraggle.update()
+        #move_fish()
+				screen.fill(color)
+				#kraggle.draw(screen)
+        #screen.blit(fish_image, fish_rect)
+				pygame.display.flip()
+
 
 if __name__ == '__main__':
-  main()
+    main()
